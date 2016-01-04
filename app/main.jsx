@@ -12,7 +12,7 @@ var Main = React.createClass({
     this.updateApp();
   },
   render() {
-    return <Layout words={this.state.words}></Layout>
+    return <Layout todos={this.state.todos}></Layout>
   }
 })
 

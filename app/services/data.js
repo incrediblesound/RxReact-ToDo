@@ -1,17 +1,29 @@
 import store from './store.js';
 import rx from 'rx';
 
-var updateWords = new Rx.Subject();
+var addToDo = new Rx.Subject();
 
-var subscription = updateWords.subscribe(
-  function(word){
-    store.addWord(word);
-    store.update();
+var addSubscription = addToDo.subscribe(
+  function(todo){
+    store.addToDo(todo);
   },
   function(err){
   },
   function(){
   }
-)
+);
 
-export default updateWords;
+
+var removeToDo = new Rx.Subject();
+
+var removeSubscription = removeToDo.subscribe(
+  function(todo){
+    store.removeToDo(todo);
+  },
+  function(err){
+  },
+  function(){
+  }
+);
+
+export { addToDo, removeToDo }

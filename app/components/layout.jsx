@@ -1,7 +1,7 @@
 import React from 'react';
 import rx from 'rx';
 import store from '../services/store';
-import updateWords from '../services/data';
+import { addToDo, removeToDo } from '../services/data';
 import _ from 'lodash';
 import styles from './layout.css';
 
@@ -10,6 +10,7 @@ var Navbar = React.createClass({
   render: function(){
     return(
       <div className='navbar'>
+        <h2 className='title'>"To Do" App with RxJS and React</h2>
       </div>
     )
   }
@@ -19,6 +20,10 @@ var Footer = React.createClass({
   render: function(){
     return (
       <div className='footer'>
+        <p className='footer-text'>
+        By <a href="http://www.github.com/incrediblesound">James Edwards</a>
+        2016
+        </p>
       </div>
     )
   }
@@ -36,7 +41,7 @@ var Left = React.createClass({
     })
   },
   submitValue: function(){
-    updateWords.onNext(this.state.value);
+    addToDo.onNext(this.state.value);
   },
   render: function(){
     return (
@@ -49,10 +54,28 @@ var Left = React.createClass({
 })
 
 var Right = React.createClass({
+  removeToDo: function(todo){
+    removeToDo.onNext(todo)
+  },
+  printToDos: function(){
+    var todos = _.map(this.props.todos, (todo, idx) => {
+        return (
+          <div key={idx}>
+            <h3>{todo}</h3>
+            <span className="remove" onClick={_.partial(this.removeToDo, todo)}>
+              Remove
+            </span>
+          </div>
+        )
+      }
+    )
+    return todos;
+  },
   render: function(){
     return (
       <div className='right'>
-      {_.map(this.props.words, (word) => { return (<h2>{word}</h2>) })}
+      <h2> Things to Do: </h2>
+      {this.printToDos()}
       </div>
     )
   }
@@ -64,7 +87,7 @@ export default React.createClass({
       <div className='layout'>
       <Navbar/>
       <Left/>
-      <Right words={this.props.words}/>
+      <Right todos={this.props.todos}/>
       <Footer/>
       </div>
     )

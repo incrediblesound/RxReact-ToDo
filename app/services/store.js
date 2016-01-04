@@ -3,12 +3,21 @@ var immutable = require('immutable');
 class Store {
   constructor(){
     this.store = immutable.fromJS(
-      { words: [] }
+      { todos: [] }
     )
     this.callbacks = [];
   }
-  addWord(word){
-    this.store = this.store.set('words', this.store.get('words').push(word));
+  addToDo(todo){
+    this.store = this.store.set('todos', this.store.get('todos').push(todo));
+    this.update();
+  }
+  removeToDo(todo){
+    var todos = this.store.get('todos');
+    this.store = this.store.set(
+      'todos',
+      todos.delete(todos.indexOf(todo))
+    )
+    this.update();
   }
   update(){
     _.each(this.callbacks, (cb) => {
